@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import API_BASE_URL from '../utils/api'
 import Chat from './Chat'
 import Quiz from './Quiz'
 import Reflection from './Reflection'
@@ -17,7 +18,7 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
     const initSession = async () => {
       try {
         // Start session
-        const sessionResponse = await axios.post('/api/sessions/start', null, {
+        const sessionResponse = await axios.post(`${API_BASE_URL}/sessions/start`, null, {
           params: {
             participant_id: participant.participant_id,
             module_number: moduleNumber
@@ -27,7 +28,7 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
         setSessionData(sessionResponse.data)
 
         // Get content for this topic
-        const contentResponse = await axios.get(`/api/content/${sessionResponse.data.topic}`)
+        const contentResponse = await axios.get(`${API_BASE_URL}/content/${sessionResponse.data.topic}`)
         setContent(contentResponse.data)
 
         setLoading(false)

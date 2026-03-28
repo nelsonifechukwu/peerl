@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import API_BASE_URL from '../utils/api'
 
 function Reflection({ sessionKey, onComplete }) {
   const [effectivenessText, setEffectivenessText] = useState('')
@@ -17,7 +18,7 @@ function Reflection({ sessionKey, onComplete }) {
     setSubmitting(true)
 
     try {
-      await axios.post(`/api/sessions/${sessionKey}/reflection`, {
+      await axios.post(`${API_BASE_URL}/sessions/${sessionKey}/reflection`, {
         effectiveness_text: effectivenessText.trim(),
         helpful_aspects_text: helpfulAspectsText.trim()
       })

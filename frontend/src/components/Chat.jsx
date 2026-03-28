@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
+import API_BASE_URL from '../utils/api'
 
 function Chat({ sessionKey, participantName, condition, challengeQuestion, timeRemaining }) {
   const [messages, setMessages] = useState([])
@@ -21,7 +22,8 @@ function Chat({ sessionKey, participantName, condition, challengeQuestion, timeR
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`/api/sessions/${sessionKey}/messages`)
+        const response = await axios.get(`${API_BASE_URL}/sessions/${sessionKey}/messages`)
+        console.log(`Fetched ${response.data.length} messages`)  // Add this
         setMessages(response.data)
       } catch (error) {
         console.error('Error fetching messages:', error)
@@ -58,7 +60,7 @@ function Chat({ sessionKey, participantName, condition, challengeQuestion, timeR
 
   const rotateAnchor = async () => {
     try {
-      const response = await axios.post(`/api/sessions/${sessionKey}/rotate-anchor`)
+      const response = await axios.post(`${API_BASE_URL}/sessions/${sessionKey}/rotate-anchor`)
       
       if (response.data.anchor_rotation_complete) {
         return
@@ -78,7 +80,7 @@ function Chat({ sessionKey, participantName, condition, challengeQuestion, timeR
 
   const fetchCoaching = async () => {
     try {
-      const response = await axios.get(`/api/sessions/${sessionKey}/coaching`)
+      const response = await axios.get(`${API_BASE_URL}/sessions/${sessionKey}/coaching`)
       setCoaching(response.data.coaching)
     } catch (error) {
       console.error('Error fetching coaching:', error)
@@ -93,7 +95,7 @@ function Chat({ sessionKey, participantName, condition, challengeQuestion, timeR
     setSending(true)
 
     try {
-      await axios.post(`/api/sessions/${sessionKey}/messages`, {
+      await axios.post(`${API_BASE_URL}/sessions/${sessionKey}/messages`, {
         content: newMessage.trim()
       })
       

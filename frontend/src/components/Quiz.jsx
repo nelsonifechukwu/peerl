@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import API_BASE_URL from '../utils/api'
 
 function Quiz({ sessionKey, quiz, onComplete }) {
   const [responses, setResponses] = useState({})
@@ -29,7 +30,7 @@ function Quiz({ sessionKey, quiz, onComplete }) {
         selected_answer: responses[q.id]
       }))
 
-      const response = await axios.post(`/api/sessions/${sessionKey}/quiz`, {
+      const response = await axios.post(`${API_BASE_URL}/sessions/${sessionKey}/quiz`, {
         responses: formattedResponses
       })
 

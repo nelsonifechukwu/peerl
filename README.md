@@ -375,7 +375,3 @@ print(f"Both Equal: {preferences.get('both_equal', 0)}/{len(df)}")
 - All files are heavily commented
 - Architecture is modular - each file has one clear purpose
 - Read the code - it's your best documentation
-
----
-
-**Ready to run your study! Good luck with CW3!** 🎯

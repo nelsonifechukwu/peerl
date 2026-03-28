@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import API_BASE_URL from '../utils/api'
 
 function Login({ onLogin }) {
   const [name, setName] = useState('')
@@ -18,7 +19,7 @@ function Login({ onLogin }) {
     setError('')
 
     try {
-      const response = await axios.post('/api/participants', { name: name.trim() })
+      const response = await axios.post(`${API_BASE_URL}/participants`, { name: name.trim() })
       onLogin(response.data)
     } catch (err) {
       setError('Failed to register. Please try again.')
