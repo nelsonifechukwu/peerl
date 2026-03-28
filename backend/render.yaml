@@ -1,0 +1,26 @@
+# Render.com Deployment Configuration
+# This file tells Render how to build and run your backend
+
+# Build Command
+# Run this in the backend directory
+build: pip install -r requirements.txt
+
+# Start Command
+# This starts your FastAPI server
+start: uvicorn main:app --host 0.0.0.0 --port $PORT
+
+# Environment Variables
+# Add these in Render dashboard:
+# OPENAI_API_KEY = your-openai-api-key-here
+
+# Health Check Path
+# Render will ping this to ensure app is running
+healthCheckPath: /
+
+# Region
+# Choose closest to your participants
+region: oregon  # or frankfurt, singapore, etc.
+
+# Instance Type
+# Free tier is sufficient for N=16
+plan: free

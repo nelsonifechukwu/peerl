@@ -1,0 +1,60 @@
+peer-learning-platform/
+│
+├── 📚 DOCUMENTATION (Start here!)
+│   ├── FINAL_SUMMARY.md          ⭐ READ THIS FIRST
+│   ├── QUICKSTART.md              ⭐ 10-minute setup guide
+│   ├── README.md                  ⭐ Complete implementation guide
+│   ├── STUDY_CHECKLIST.md         Execution roadmap
+│   ├── DEPLOYMENT.md              Cloud deployment guide
+│   └── TROUBLESHOOTING.md         Common issues & fixes
+│
+├── 🐍 BACKEND (Python/FastAPI - 1,500+ lines)
+│   ├── main.py                    Complete API (450+ lines)
+│   ├── bot_logic.py               Realistic AI bot behavior
+│   ├── llm_service.py             GPT-4 integration
+│   ├── content.py                 Topics & quizzes
+│   ├── database.py                SQLite data models
+│   ├── config.py                  Study settings
+│   ├── requirements.txt           Python dependencies
+│   ├── render.yaml                Render.com deployment
+│   ├── Procfile                   Heroku deployment
+│   └── .env.example               API key template
+│
+├── ⚛️ FRONTEND (React/Vite - 1,200+ lines)
+│   ├── src/
+│   │   ├── App.jsx                Main application
+│   │   ├── main.jsx               Entry point
+│   │   ├── index.css              Styling
+│   │   └── components/
+│   │       ├── Login.jsx          Participant registration
+│   │       ├── SessionFlow.jsx    Session orchestration
+│   │       ├── Chat.jsx           Discussion interface
+│   │       ├── Quiz.jsx           Knowledge verification
+│   │       ├── Reflection.jsx     Post-module reflection
+│   │       └── FinalChoice.jsx    Comparative preference
+│   ├── package.json               npm dependencies
+│   ├── vite.config.js             Dev server config
+│   └── index.html                 HTML template
+│
+└── 🔧 TOOLS
+    ├── analyze_data.py            Statistical analysis script
+    └── test_platform.py           Automated testing script
+
+📊 OUTPUT FILES (After study):
+    ├── study_data.json            Exported data (from API)
+    ├── cw3_results_draft.txt      Formatted results text
+    ├── figure1_condition_comparison.png
+    ├── figure2_individual_patterns.png
+    └── figure3_preferences.png
+
+🎯 QUICK START:
+1. Read: FINAL_SUMMARY.md
+2. Setup: Follow QUICKSTART.md (10 mins)
+3. Test: Run test_platform.py
+4. Study: Execute STUDY_CHECKLIST.md
+5. Analysis: Run analyze_data.py
+6. Write: Use README.md guidance for CW3
+
+Total Files: 27
+Total Lines: ~3,000+
+Status: PRODUCTION READY ✅
