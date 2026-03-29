@@ -46,11 +46,11 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
     console.log('Module number:', moduleNumber)
     
     if (phase === 'intro') {
-      const primingTime = sessionData?.condition === 'llm_only' ? 180 : 120
+      const primingTime = sessionData?.condition === 'llm_only' ? 10 : 10
       setTimeRemaining(primingTime)
       setPhase('priming')
     } else if (phase === 'priming') {
-      const discussionTime = sessionData?.condition === 'llm_only' ? 480 : 540
+      const discussionTime = sessionData?.condition === 'llm_only' ? 60 : 65
       setTimeRemaining(discussionTime)
       setPhase('discussion')
     } else if (phase === 'discussion') {
