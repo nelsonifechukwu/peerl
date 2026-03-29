@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import API_BASE_URL from '../utils/api'
 import Chat from './Chat'
@@ -7,17 +7,16 @@ import Reflection from './Reflection'
 import FinalChoice from './FinalChoice'
 
 function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
-  const [phase, setPhase] = useState('intro') // intro, priming, discussion, quiz, reflection, rest, final_choice
+  const [phase, setPhase] = useState('intro')
   const [sessionData, setSessionData] = useState(null)
   const [content, setContent] = useState(null)
-  const [timeRemaining, setTimeRemaining] = useState(60) // seconds
+  const [timeRemaining, setTimeRemaining] = useState(60)
   const [loading, setLoading] = useState(true)
 
   // Get session configuration and content
   useEffect(() => {
     const initSession = async () => {
       try {
-        // Start session
         const sessionResponse = await axios.post(`${API_BASE_URL}/sessions/start`, null, {
           params: {
             participant_id: participant.participant_id,
@@ -27,7 +26,6 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
         
         setSessionData(sessionResponse.data)
 
-        // Get content for this topic
         const contentResponse = await axios.get(`${API_BASE_URL}/content/${sessionResponse.data.topic}`)
         setContent(contentResponse.data)
 
@@ -40,6 +38,42 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
 
     initSession()
   }, [participant, moduleNumber])
+
+  // Phase completion handler wrapped in useCallback
+  const handlePhaseComplete = useCallback(() => {
+    console.log('=== handlePhaseComplete called ===')
+    console.log('Current phase:', phase)
+    console.log('Module number:', moduleNumber)
+    
+    if (phase === 'intro') {
+      const primingTime = sessionData?.condition === 'llm_only' ? 180 : 120
+      setTimeRemaining(primingTime)
+      setPhase('priming')
+    } else if (phase === 'priming') {
+      const discussionTime = sessionData?.condition === 'llm_only' ? 480 : 540
+      setTimeRemaining(discussionTime)
+      setPhase('discussion')
+    } else if (phase === 'discussion') {
+      setPhase('quiz')
+    } else if (phase === 'quiz') {
+      setPhase('reflection')
+    } else if (phase === 'reflection') {
+      if (moduleNumber === 1) {
+        console.log('=== Starting rest break before Module 2 ===')
+        setPhase('rest')
+        setTimeRemaining(60)
+      } else {
+        console.log('=== Moving to final choice ===')
+        setPhase('final_choice')
+      }
+    } else if (phase === 'rest') {
+      console.log('=== Rest complete, calling onModuleComplete ===')
+      onModuleComplete()
+    } else if (phase === 'final_choice') {
+      console.log('=== Final choice complete ===')
+      onModuleComplete()
+    }
+  }, [phase, moduleNumber, sessionData, onModuleComplete])
 
   // Timer countdown
   useEffect(() => {
@@ -56,53 +90,12 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
       return () => clearTimeout(timer)
     }
     
-    // CRITICAL: When timer hits 0, advance immediately
-    if (timeRemaining === 0 && (phase === 'priming' || phase === 'discussion' || phase === 'rest')) {
-      console.log(`Timer expired for phase: ${phase}, advancing...`)
-      
-      // Use setTimeout to break out of the render cycle
-      const advanceTimer = setTimeout(() => {
-        handlePhaseComplete()
-      }, 100)
-      
-      return () => clearTimeout(advanceTimer)
+    // When timer hits 0, advance
+    if (timeRemaining === 0) {
+      console.log(`=== Timer expired for phase: ${phase} ===`)
+      handlePhaseComplete()
     }
-  }, [timeRemaining, phase])
-
-  const handlePhaseComplete = () => {
-    if (phase === 'intro') {
-      // Start priming phase
-      const primingTime = sessionData.condition === 'llm_only' ? 10 : 10 // 3 or 2 minutes
-      setTimeRemaining(primingTime)
-      setPhase('priming')
-    } else if (phase === 'priming') {
-      // Start discussion
-      const discussionTime = sessionData.condition === 'llm_only' ? 65 : 65 // 8 or 9 minutes
-      setTimeRemaining(discussionTime)
-      setPhase('discussion')
-    } else if (phase === 'discussion') {
-      // Move to quiz
-      setPhase('quiz')
-    } else if (phase === 'quiz') {
-      // Move to reflection
-      setPhase('reflection')
-    } else if (phase === 'reflection') {
-      if (moduleNumber === 1) {
-        // Rest before Module 2
-        setPhase('rest')
-        setTimeRemaining(60)
-      } else {
-        // Move to final choice
-        setPhase('final_choice')
-      }
-    } else if (phase === 'rest') {
-      // Rest complete
-      onModuleComplete()
-    } else if (phase === 'final_choice') {
-      // Study complete
-      onModuleComplete()
-    }
-  }
+  }, [timeRemaining, phase, handlePhaseComplete])
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60)
@@ -223,6 +216,19 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
           <p style={{ color: '#666' }}>
             Module 2 will begin automatically when time expires.
           </p>
+          
+          {/* Emergency manual override button */}
+          {timeRemaining === 0 && (
+            <button 
+              onClick={handlePhaseComplete} 
+              style={{ 
+                marginTop: '20px',
+                backgroundColor: '#28a745'
+              }}
+            >
+              Continue to Module 2 →
+            </button>
+          )}
         </div>
       )}
 
