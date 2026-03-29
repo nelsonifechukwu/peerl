@@ -13,10 +13,11 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
   const [timeRemaining, setTimeRemaining] = useState(60)
   const [loading, setLoading] = useState(true)
 
-  // CRITICAL FIX: Reset phase when module number changes
+  // CRITICAL FIX: Reset phase AND timer when module number changes
   useEffect(() => {
     console.log('=== Module number changed to:', moduleNumber, '===')
     setPhase('intro')
+    setTimeRemaining(60)  // IMPORTANT: Reset timer to prevent double trigger
     setLoading(true)
   }, [moduleNumber])
 
@@ -57,7 +58,7 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
     console.log('Module number:', moduleNumber)
     
     if (phase === 'intro') {
-      // Use your test timings - keep them short for testing!
+      // Use your test timings
       const primingTime = sessionData?.condition === 'llm_only' ? 10 : 10
       console.log('Starting priming phase with', primingTime, 'seconds')
       setTimeRemaining(primingTime)
@@ -84,9 +85,13 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
         setPhase('final_choice')
       }
     } else if (phase === 'rest') {
-      console.log('=== Rest complete - Calling onModuleComplete to start Module 2 ===')
-      console.log('Current moduleNumber:', moduleNumber)
-      onModuleComplete()
+      // CRITICAL FIX: Only advance if we're actually at end of Module 1
+      if (moduleNumber === 1) {
+        console.log('=== Rest complete - Calling onModuleComplete to start Module 2 ===')
+        onModuleComplete()
+      } else {
+        console.log('=== Ignoring rest completion (already in Module', moduleNumber, ') ===')
+      }
     } else if (phase === 'final_choice') {
       console.log('=== Final choice complete - Study done ===')
       onModuleComplete()
