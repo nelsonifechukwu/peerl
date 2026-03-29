@@ -13,10 +13,19 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
   const [timeRemaining, setTimeRemaining] = useState(60)
   const [loading, setLoading] = useState(true)
 
+  // CRITICAL FIX: Reset phase when module number changes
+  useEffect(() => {
+    console.log('=== Module number changed to:', moduleNumber, '===')
+    setPhase('intro')
+    setLoading(true)
+  }, [moduleNumber])
+
   // Get session configuration and content
   useEffect(() => {
     const initSession = async () => {
       try {
+        console.log('Initializing session for module', moduleNumber)
+        
         const sessionResponse = await axios.post(`${API_BASE_URL}/sessions/start`, null, {
           params: {
             participant_id: participant.participant_id,
@@ -25,9 +34,11 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
         })
         
         setSessionData(sessionResponse.data)
+        console.log('Session data:', sessionResponse.data)
 
         const contentResponse = await axios.get(`${API_BASE_URL}/content/${sessionResponse.data.topic}`)
         setContent(contentResponse.data)
+        console.log('Content loaded for topic:', sessionResponse.data.topic)
 
         setLoading(false)
       } catch (error) {
@@ -46,14 +57,14 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
     console.log('Module number:', moduleNumber)
     
     if (phase === 'intro') {
-      // FIXED: Correct priming times (3 or 2 minutes)
-      const primingTime = sessionData?.condition === 'llm_only' ?   5 : 5
+      // Use your test timings - keep them short for testing!
+      const primingTime = sessionData?.condition === 'llm_only' ? 10 : 10
       console.log('Starting priming phase with', primingTime, 'seconds')
       setTimeRemaining(primingTime)
       setPhase('priming')
     } else if (phase === 'priming') {
-      // FIXED: Correct discussion times (8 or 9 minutes)
-      const discussionTime = sessionData?.condition === 'llm_only' ? 65 : 65
+      // Use your test timings
+      const discussionTime = sessionData?.condition === 'llm_only' ? 60 : 65
       console.log('Starting discussion phase with', discussionTime, 'seconds')
       setTimeRemaining(discussionTime)
       setPhase('discussion')
@@ -65,19 +76,19 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
       setPhase('reflection')
     } else if (phase === 'reflection') {
       if (moduleNumber === 1) {
-        console.log('=== Starting rest break before Module 2 ===')
+        console.log('=== Module 1 complete - Starting rest break ===')
         setPhase('rest')
         setTimeRemaining(60)
       } else {
-        console.log('=== Moving to final choice ===')
+        console.log('=== Module 2 complete - Moving to final choice ===')
         setPhase('final_choice')
       }
     } else if (phase === 'rest') {
-      console.log('=== Rest complete, calling onModuleComplete ===')
-      console.log('onModuleComplete function:', onModuleComplete)
+      console.log('=== Rest complete - Calling onModuleComplete to start Module 2 ===')
+      console.log('Current moduleNumber:', moduleNumber)
       onModuleComplete()
     } else if (phase === 'final_choice') {
-      console.log('=== Final choice complete ===')
+      console.log('=== Final choice complete - Study done ===')
       onModuleComplete()
     }
   }, [phase, moduleNumber, sessionData, onModuleComplete])
@@ -224,7 +235,7 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
             Module 2 will begin automatically when time expires.
           </p>
           
-          {/* Manual override button */}
+          {/* Emergency manual override button */}
           {timeRemaining === 0 && (
             <button 
               onClick={() => {
