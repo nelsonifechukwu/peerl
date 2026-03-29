@@ -26,7 +26,7 @@ function Quiz({ sessionKey, quiz, onComplete }) {
     try {
       // Format responses for API
       const formattedResponses = quiz.map(q => ({
-        question_number: q.id,
+        question_number: String(q.id),
         selected_answer: responses[q.id]
       }))
 
