@@ -46,16 +46,22 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
     console.log('Module number:', moduleNumber)
     
     if (phase === 'intro') {
-      const primingTime = sessionData?.condition === 'llm_only' ? 10 : 10
+      // FIXED: Correct priming times (3 or 2 minutes)
+      const primingTime = sessionData?.condition === 'llm_only' ?   5 : 5
+      console.log('Starting priming phase with', primingTime, 'seconds')
       setTimeRemaining(primingTime)
       setPhase('priming')
     } else if (phase === 'priming') {
-      const discussionTime = sessionData?.condition === 'llm_only' ? 60 : 65
+      // FIXED: Correct discussion times (8 or 9 minutes)
+      const discussionTime = sessionData?.condition === 'llm_only' ? 65 : 65
+      console.log('Starting discussion phase with', discussionTime, 'seconds')
       setTimeRemaining(discussionTime)
       setPhase('discussion')
     } else if (phase === 'discussion') {
+      console.log('Moving to quiz')
       setPhase('quiz')
     } else if (phase === 'quiz') {
+      console.log('Moving to reflection')
       setPhase('reflection')
     } else if (phase === 'reflection') {
       if (moduleNumber === 1) {
@@ -68,6 +74,7 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
       }
     } else if (phase === 'rest') {
       console.log('=== Rest complete, calling onModuleComplete ===')
+      console.log('onModuleComplete function:', onModuleComplete)
       onModuleComplete()
     } else if (phase === 'final_choice') {
       console.log('=== Final choice complete ===')
@@ -217,10 +224,13 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
             Module 2 will begin automatically when time expires.
           </p>
           
-          {/* Emergency manual override button */}
+          {/* Manual override button */}
           {timeRemaining === 0 && (
             <button 
-              onClick={handlePhaseComplete} 
+              onClick={() => {
+                console.log('Manual continue button clicked')
+                handlePhaseComplete()
+              }}
               style={{ 
                 marginTop: '20px',
                 backgroundColor: '#28a745'
