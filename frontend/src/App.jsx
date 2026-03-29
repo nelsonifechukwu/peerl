@@ -1,11 +1,17 @@
 import { useState } from 'react'
+import ConsentForm from './components/ConsentForm'
 import Login from './components/Login'
 import SessionFlow from './components/SessionFlow'
 
 function App() {
+  const [consented, setConsented] = useState(false)
   const [participant, setParticipant] = useState(null)
   const [currentModule, setCurrentModule] = useState(1)
   const [studyComplete, setStudyComplete] = useState(false)
+
+  const handleConsent = () => {
+    setConsented(true)
+  }
 
   const handleLogin = (participantData) => {
     setParticipant(participantData)
@@ -57,6 +63,10 @@ function App() {
         </div>
       </div>
     )
+  }
+
+  if (!consented) {
+    return <ConsentForm onConsent={handleConsent} />
   }
 
   if (!participant) {
