@@ -43,18 +43,29 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
 
   // Timer countdown
   useEffect(() => {
-    if (phase === 'intro' || phase === 'quiz' || phase === 'reflection') {
-      return // No auto-advance for these phases
+    // Phases that don't use timer auto-advance
+    if (phase === 'intro' || phase === 'quiz' || phase === 'reflection' || phase === 'final_choice') {
+      return
     }
 
+    // If there's time remaining, count down
     if (timeRemaining > 0) {
       const timer = setTimeout(() => {
-        setTimeRemaining(time => time - 1)
+        setTimeRemaining(prev => prev - 1)
       }, 1000)
       return () => clearTimeout(timer)
-    } else {
-      // Time's up - advance to next phase
-      handlePhaseComplete()
+    }
+    
+    // CRITICAL: When timer hits 0, advance immediately
+    if (timeRemaining === 0 && (phase === 'priming' || phase === 'discussion' || phase === 'rest')) {
+      console.log(`Timer expired for phase: ${phase}, advancing...`)
+      
+      // Use setTimeout to break out of the render cycle
+      const advanceTimer = setTimeout(() => {
+        handlePhaseComplete()
+      }, 100)
+      
+      return () => clearTimeout(advanceTimer)
     }
   }, [timeRemaining, phase])
 
