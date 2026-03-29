@@ -43,7 +43,7 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
 
   // Timer countdown
   useEffect(() => {
-    if (phase === 'intro' || phase === 'quiz' || phase === 'reflection' || phase === 'rest') {
+    if (phase === 'intro' || phase === 'quiz' || phase === 'reflection') {
       return // No auto-advance for these phases
     }
 
