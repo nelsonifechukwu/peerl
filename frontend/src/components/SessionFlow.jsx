@@ -5,6 +5,7 @@ import Chat from './Chat'
 import Quiz from './Quiz'
 import Reflection from './Reflection'
 import FinalChoice from './FinalChoice'
+import ReactMarkdown from 'react-markdown'
 
 function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
   const [phase, setPhase] = useState('intro')
@@ -173,7 +174,7 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
             marginBottom: '20px',
             whiteSpace: 'pre-wrap'
           }}>
-            {content.challenge_question}
+            <ReactMarkdown>{content.challenge_question}</ReactMarkdown>
           </div>
 
           <button onClick={handlePhaseComplete}>
@@ -192,7 +193,7 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
             fontSize: '1.05em',
             marginBottom: '20px'
           }}>
-            {content.priming_text}
+            <ReactMarkdown>{content.priming_text}</ReactMarkdown>
           </div>
           
           <p style={{ color: '#666', fontStyle: 'italic' }}>
