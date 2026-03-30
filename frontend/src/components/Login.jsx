@@ -41,7 +41,7 @@ function Login({ onLogin }) {
         <div className="info-box">
           <p><strong>Before you begin:</strong></p>
           <p>• You will participate in two discussion sessions on different topics</p>
-          <p>• You will discuss with two other participants (who may include AI systems)</p>
+          <p>• You will discuss with two other participants </p>
           <p>• There are short quizzes and reflection questions</p>
           <p>• Your participation is voluntary and you can withdraw at any time</p>
         </div>
