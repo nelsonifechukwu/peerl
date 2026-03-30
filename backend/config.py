@@ -28,8 +28,8 @@ ANCHOR_ROTATION_MINS = 3  # Each participant facilitates for 3 mins
 NUM_PARTICIPANTS = 3       # Real participant + 2 bots
 
 # Bot Behavior Parameters (from research)
-BOT_RESPONSE_DELAY_MIN = 10  # seconds
-BOT_RESPONSE_DELAY_MAX = 20  # seconds
+BOT_RESPONSE_DELAY_MIN = 5  # seconds
+BOT_RESPONSE_DELAY_MAX = 10  # seconds
 BOT_AFFIRMATION_PROB = 0.70  # 70% affirm
 BOT_QUESTION_PROB = 0.20     # 20% ask questions
 BOT_CONTRIBUTION_PROB = 0.10 # 10% contribute new ideas
