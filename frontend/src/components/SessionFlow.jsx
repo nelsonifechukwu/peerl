@@ -66,7 +66,7 @@ function SessionFlow({ participant, moduleNumber, onModuleComplete }) {
       setPhase('priming')
     } else if (phase === 'priming') {
       // Use your test timings
-      const discussionTime = sessionData?.condition === 'llm_only' ? 60 : 65
+      const discussionTime = sessionData?.condition === 'llm_only' ? 200 : 200
       console.log('Starting discussion phase with', discussionTime, 'seconds')
       setTimeRemaining(discussionTime)
       setPhase('discussion')
