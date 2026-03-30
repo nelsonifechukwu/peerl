@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import image from '../assets/image.png';
 
 function ConsentForm({ onConsent }) {
   const [consents, setConsents] = useState({
@@ -39,7 +40,7 @@ function ConsentForm({ onConsent }) {
         }}>
           <h1 style={{ margin: 0, fontSize: '1.5em' }}>Participant Information Sheet</h1>
           <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/University_of_Cambridge_logo.svg/200px-University_of_Cambridge_logo.svg.png" 
+            src={image}
             alt="University of Cambridge"
             style={{ height: '50px' }}
           />
