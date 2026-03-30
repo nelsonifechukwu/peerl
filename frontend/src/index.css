@@ -225,15 +225,16 @@ textarea {
   color: #666;
 }
 
-/* Markdown content styling - TIGHTER SPACING */
+/* Markdown content styling - VERY TIGHT SPACING */
 .card p {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   line-height: 1.5;
 }
 
 /* Remove margin from paragraphs inside list items */
 .card li p {
   margin-bottom: 0;
+  display: inline;  /* Force inline to prevent extra spacing */
 }
 
 /* Remove margin from last paragraph in any container */
@@ -241,16 +242,21 @@ textarea {
   margin-bottom: 0;
 }
 
-/* Tighter list spacing */
+/* Remove margin from empty paragraphs */
+.card p:empty {
+  display: none;
+}
+
+/* Very tight list spacing */
 .card ul, .card ol {
   margin-left: 25px;
-  margin-bottom: 12px;
-  margin-top: 8px;
+  margin-bottom: 8px;
+  margin-top: 4px;
 }
 
 .card li {
-  margin-bottom: 4px;
-  line-height: 1.6;
+  margin-bottom: 2px;
+  line-height: 1.5;
 }
 
 .card strong {
@@ -266,8 +272,8 @@ textarea {
 .card h3 {
   font-size: 1.1em;
   color: #444;
-  margin-top: 16px;
-  margin-bottom: 8px;
+  margin-top: 12px;
+  margin-bottom: 6px;
 }
 
 .card code {
@@ -283,14 +289,14 @@ textarea {
   padding: 12px;
   border-radius: 4px;
   overflow-x: auto;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .card blockquote {
   border-left: 4px solid #ddd;
   padding-left: 15px;
   margin-left: 0;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   color: #666;
   font-style: italic;
 }
